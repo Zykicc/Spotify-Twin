@@ -1,0 +1,31 @@
+bcrypt==3.1.4
+blinker==1.4
+cffi==1.16.0
+click==8.0.0
+Flask==2.2.5
+Flask-Bcrypt==1.0.1
+Flask-WTF==1.2.1
+Flask-DebugToolbar==0.13.1
+Flask-SQLAlchemy==3.1.1
+greenlet==3.0.2
+itsdangerous==2.0.0
+Jinja2==3.0.3
+MarkupSafe==2.1.1
+parso==0.8.3
+psycopg2-binary==2.8.4
+pycparser==2.21
+six==1.16.0
+SQLAlchemy==2.0.23
+typing_extensions==4.9.0
+Werkzeug==2.2.2
+Flask-Login==0.6.3
+WTForms==3.1.2
+## The following requirements were added by pip freeze:
+dnspython==2.4.2
+email-validator==2.1.0.post1
+idna==3.6
+## The following requirements were added by pip freeze:
+certifi==2023.11.17
+charset-normalizer==3.3.2
+requests==2.31.0
+urllib3==2.1.0

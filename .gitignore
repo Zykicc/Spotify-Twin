@@ -1,0 +1,6 @@
+venv
+__pycache__
+user1_playlist.pickle
+user2_playlist.pickle
+user1_songlist.pickle
+user2_songlist.pickle

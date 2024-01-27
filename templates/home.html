@@ -1,0 +1,175 @@
+{% extends 'base.html' %} {% block content %}
+<div id="loading-overlay">
+  <div
+    style="
+      width: 200px;
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    "
+  >
+    <span class="loader"></span>
+  </div>
+  <h2 class="loadingMsg" id="loadingMsg0">Retreiving all Songs...</h2>
+  <h2 class="loadingMsg" id="loadingMsg1">Do you have slow internet?</h2>
+  <h2 class="loadingMsg" id="loadingMsg2">Ok this is way to many songs!</h2>
+  <h2 class="loadingMsg" id="loadingMsg3">
+    Someone has way to much free time!
+  </h2>
+</div>
+<div class="column-wrapper">
+  <div class="column1">
+    <form action="/getUserPlaylists" method="POST" class="user1">
+      <div class="user-container">
+        <div class="form__group field">
+          {{ form1.hidden_tag() }} {% for field in form1 if
+          field.widget.input_type != 'hidden' %} {% for error in field.errors %}
+          <span class="text-danger">{{ error }}</span>
+          {% endfor %} {{ field(placeholder=field.label.text,
+          class="form__field") }}
+          <label for="name" class="form__label"
+            >Enter Spotify link for User 1</label
+          >
+
+          {% endfor %}
+        </div>
+        <button id="column1-button" class="column1-button">Submit</button>
+      </div>
+    </form>
+    <div class="playlist-list">
+      {% if playListUser1|length > 0 %}
+      <h2 class="selectPlaylist">Select a Playlist</h2>
+      {% endif %} {% for playlist in playListUser1 %} {% if user1PlaylistIsEmpty
+      %}
+      <div class="playlist-error">No public playlists found</div>
+      <p class="playlist-error">Make sure user playlists are public</p>
+      {% endif %}
+      <div
+        class="playlist-box {% if selectedUser1PlaylistId == playlist.id %} selectedPlaylist {% endif %}"
+        onclick="showLoading()"
+      >
+        <a
+          class="playlist-wrapper"
+          href="/getPlaylistItems/user1/{{playlist.id}}"
+        >
+          <img src="{{playlist.image}}" alt="" class="playlist-img" />
+          <div class="playlistItem-wrapper">
+            <div class="playlist-item">{{ playlist.name }}</div>
+            <div class="playlist-songs">({{ playlist.songCount }} songs)</div>
+          </div>
+        </a>
+      </div>
+
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="column2">
+    <div class="clearCompareWrapper">
+      {% if playListUser1 or playListUser2 %}
+      <a href="/clearData" class="clear-button greenFillBtn"
+        ><span>Clear</span></a
+      >
+      {% endif %} {% if showCompareBtn %}
+      <a href="/compareUsersPlaylists" class="compare-button greenFillBtn"
+        ><span>Compare</span></a
+      >
+      {% endif %}
+    </div>
+    {% if chemistryData %}
+    <div class="chem-wrapper">
+      <div class="spotifyChemPerc-container">
+        <div class="spotifychemPerc">{{chemistryData.spotifyChemPerc}}</div>
+      </div>
+      <div class="spotifychemPerc-title">Total Spotify Chemistry</div>
+      <div class="divider-line"></div>
+      <div class="morePerc">
+        <div class="chemPerc">More info:</div>
+        <div class="chemPerc">
+          <span class="chemPercNum">{{chemistryData.sameSongCount}}</span>
+          Shared Songs
+        </div>
+        <div class="chemPerc">
+          <span class="chemPercNum">{{chemistryData.sameArtistCount}}</span>
+          Shared Artists
+        </div>
+        <div class="chemPerc">
+          <span class="chemPercNum">{{chemistryData.sameAlbumCount}}</span>
+          Shared Albums
+        </div>
+      </div>
+      <div class="divider-line"></div>
+      <div class="commonSong-title">Common Songs</div>
+      <div class="commonSongsWrapper">
+        {% for data in CommonSongData %}
+        <div class="commonSong-item">
+          <img
+            class="commonSong-image"
+            src="{{data.image[0].url}}"
+            alt=""
+            style="height: 50px; width: 50px"
+          />
+          <div class="name-artist-wrapper">
+            <a class="songName-link" href="{{data.songUrl}}" target="_blank"
+              >{{data.name}}</a
+            >
+            <div style="color: grey">
+              {% for artist in data.artists %}{{artist}}{% if loop.index !=
+              data.artists|length %},{% endif %} {% endfor %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    {% endif %}
+  </div>
+
+  <div class="column3">
+    <form action="/getUserPlaylists" method="POST" class="user2">
+      <div class="user-container">
+        <div class="form__group field">
+          {{ form2.hidden_tag() }} {% for field in form2 if
+          field.widget.input_type != 'hidden' %} {% for error in field.errors %}
+          <span class="text-danger">{{ error }}</span>
+          {% endfor %} {{ field(placeholder=field.label.text,
+          class="form__field") }}
+          <label for="name" class="form__label"
+            >Enter Spotiy link for User 2</label
+          >
+          {% endfor %}
+        </div>
+        <button id="column2-button" class="column2-button">Submit</button>
+      </div>
+    </form>
+    <div class="playlist-list">
+      {% if playListUser2|length > 0 %}
+      <h2 class="selectPlaylist">Select a Playlist</h2>
+      {% endif %} {% if user2PlaylistIsEmpty %}
+      <div class="playlist-error">No public playlists found</div>
+      <p class="playlist-error">Make sure user playlists are public</p>
+      {% endif %} {% for playlist in playListUser2 %}
+      <div
+        class="playlist-box {% if selectedUser2PlaylistId == playlist.id %} selectedPlaylist {% endif %}"
+        onclick="showLoading()"
+      >
+        <a
+          class="playlist-wrapper"
+          href="/getPlaylistItems/user2/{{playlist.id}}"
+        >
+          <img src="{{playlist.image}}" alt="" class="playlist-img" />
+          <div class="playlistItem-wrapper">
+            <div class="playlist-item">{{ playlist.name }}</div>
+            <div class="playlist-songs">({{ playlist.songCount }} songs)</div>
+          </div>
+        </a>
+      </div>
+
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% endblock %}

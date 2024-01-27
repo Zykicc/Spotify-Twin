@@ -1,0 +1,32 @@
+{% extends 'base.html' %} {% block content %}
+
+<!--Home-->
+<section class="home">
+  <div class="login_screen">
+    <div class="form_container">
+      <!--Login form-->
+      <div class="login_form">
+        <form method="POST">
+          <h2>Login</h2>
+
+          <div class="input_box">
+            {{ form.hidden_tag() }} {% for field in form if
+            field.widget.input_type != 'hidden' %} {% for error in field.errors
+            %}
+            <span class="text-danger">{{ error }}</span>
+            {% endfor %} {{ field(placeholder=field.label.text,
+            class="form-control") }} {% endfor %}
+          </div>
+
+          <button class="button">Login Now</button>
+
+          <div class="login_link">
+            Dont have an account? <a href="/register" id="signup">Signup</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

@@ -1,0 +1,542 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-color: #121212;
+
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+#loading-overlay {
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(136, 136, 136, 0.5);
+  z-index: 500;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader {
+  transform: scale(2);
+  width: 8px;
+  height: 40px;
+  border-radius: 4px;
+  display: block;
+  margin: 20px auto;
+  position: relative;
+  background: currentColor;
+  color: #1db954;
+  box-sizing: border-box;
+  animation: animloader 0.3s 0.3s linear infinite alternate;
+}
+
+.loader::after,
+.loader::before {
+  content: "";
+  width: 8px;
+  height: 40px;
+  border-radius: 4px;
+  background: currentColor;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 20px;
+  box-sizing: border-box;
+  animation: animloader 0.3s 0.45s linear infinite alternate;
+}
+.loader::before {
+  left: -20px;
+  animation-delay: 0s;
+}
+
+@keyframes animloader {
+  0% {
+    height: 48px;
+  }
+  100% {
+    height: 4px;
+  }
+}
+
+.loadingMsg {
+  display: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: #ffffff;
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: inset 0 0 20px 20px #23232329;
+}
+
+.header {
+  position: fixed;
+  height: 80px;
+  width: 100%;
+  z-index: 100;
+  padding: 0 20px;
+}
+.nav {
+  width: 100%;
+  margin: 0 auto;
+  background-color: #000000;
+  width: 100%;
+  padding: 1rem 5rem;
+}
+
+.nav,
+.nav_items {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: space-between;
+}
+.nav_logo {
+  font-size: 25px;
+  color: #1db954;
+}
+.nav_item {
+  column-gap: 25px;
+}
+.nav_link {
+  color: #1db954;
+  border-bottom: none;
+  transition: 0.3s all ease;
+}
+.nav_link:hover {
+  color: #d9d9d9;
+  border-bottom: 1px solid #1db954;
+}
+
+.home {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+}
+
+.login_screen {
+  display: flex;
+  height: 100%;
+  justify-content: center;
+}
+
+.form_container {
+  max-width: 320px;
+  width: 100%;
+  top: 50%;
+  left: 50%;
+  z-index: 101;
+  background: transparent;
+  padding: 25px;
+  height: fit-content;
+  margin-top: 5rem;
+}
+.form_container h2 {
+  font-size: 22px;
+  color: #1ed760;
+  text-align: center;
+}
+
+.input_box {
+  position: relative;
+  margin-top: 30px;
+  width: 100%;
+  height: 40px;
+}
+
+.input_box input {
+  height: 100%;
+  width: 100%;
+  border: none;
+  padding: 1rem;
+  outline: none;
+  color: #ffffff;
+  transition: all 0.2 ease;
+  border-bottom: 1.5px solid #aaaaaa;
+  background-color: transparent;
+}
+
+.input_box input:focus {
+  border-color: #1ed760;
+}
+.input_box i {
+  position: absolute;
+  top: 10%;
+  transform: translate(-50%);
+  font-size: 20px;
+}
+
+.input_box i.password {
+}
+
+.input_box i.user {
+  color: #707070;
+  left: 5%;
+}
+.input_box input:focus ~ i.user,
+.input_box input:focus ~ i.password {
+  color: #1ed760;
+}
+
+/* CSS */
+.form_container .button {
+  appearance: none;
+  background-color: transparent;
+  border: 2px solid #1a1a1a;
+  border-radius: 15px;
+  box-sizing: border-box;
+  color: #3b3b3b;
+  cursor: pointer;
+  margin-top: 75px;
+  font-family: Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+  font-weight: 600;
+
+  min-height: 60px;
+  min-width: 0;
+  outline: none;
+  padding: 16px 24px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 100%;
+  will-change: transform;
+}
+
+.form_container .button:disabled {
+  pointer-events: none;
+}
+
+.form_container .button:hover {
+  color: #fff;
+  background-color: #1a1a1a;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+
+.form_container .button:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+
+/* .form_container .button {
+  background: #1ed760;
+  margin-top: 80px;
+  width: 100%;
+  padding: 10px 0;
+  border-radius: 10px;
+
+  border: 1px solid greenyellow;
+  cursor: pointer;
+}
+.form_container .button:hover {
+  border: 1px solid darkgreen;
+} */
+
+.login_link {
+  font-size: 12px;
+  text-align: center;
+  margin-top: 15px;
+  color: #1ed760;
+}
+
+.form-control {
+  margin-bottom: 20px;
+}
+
+/* SIGN UP PAGE ---------------------------------------------  */
+.signup_screen {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.signup_form_container {
+  max-width: 320px;
+  width: 100%;
+  height: fit-content;
+  z-index: 101;
+  padding: 25px;
+  box-shadow: rgba(0, 0, 0, 0.1);
+
+  margin-top: 5rem;
+}
+.signup_form_container h2 {
+  font-size: 22px;
+  color: #1ed760;
+  text-align: center;
+}
+
+.signup_form_container .button {
+  appearance: none;
+  background-color: transparent;
+  border: 2px solid #1a1a1a;
+  border-radius: 15px;
+  box-sizing: border-box;
+  color: #3b3b3b;
+  cursor: pointer;
+  margin-top: 135px;
+  font-family: Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica,
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  font-size: 16px;
+  font-weight: 600;
+
+  min-height: 60px;
+  min-width: 0;
+  outline: none;
+  padding: 16px 24px;
+  text-align: center;
+  text-decoration: none;
+  transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  width: 100%;
+  will-change: transform;
+}
+
+.signup_form_container .button:disabled {
+  pointer-events: none;
+}
+
+.signup_form_container .button:hover {
+  color: #fff;
+  background-color: #1a1a1a;
+  box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+  transform: translateY(-2px);
+}
+
+.signup_form_container .button:active {
+  box-shadow: none;
+  transform: translateY(0);
+}
+
+/* .signup_form_container .button {
+  background: #1ed760;
+  margin-top: 135px;
+  width: 100%;
+  padding: 10px 0;
+  border-radius: 10px;
+
+  border: 1px solid rgb(0, 0, 0);
+  cursor: pointer;
+}
+
+.signup_form_container .button:hover {
+  border: 1px solid darkgreen;
+} */
+
+.signup_link {
+  font-size: 12px;
+  text-align: center;
+  margin-top: 15px;
+  color: #1ed760;
+}
+/*-------------------------------------------------------------  */
+
+.welcome-container {
+  font-size: 30px;
+  width: 100%;
+  height: -webkit-fill-available;
+  display: flex;
+  justify-content: center;
+  /* align-items: center; */
+  height: fit-content;
+  margin-top: 10rem;
+}
+
+.welcome-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-radius: 1rem;
+  padding: 5rem;
+
+  gap: 0.5rem;
+}
+/*home page--------------------------------------------------  */
+.column-wrapper {
+  overflow: scroll;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  height: 100%;
+}
+
+.column1,
+.column2,
+.column3 {
+  width: 30%;
+}
+
+.form__group {
+  position: relative;
+  padding: 15px 0 0;
+  margin-top: 10px;
+  width: 100%;
+  margin-left: 10px;
+}
+
+.form__field {
+  font-family: inherit;
+  width: 100%;
+  border: 0;
+  border-bottom: 2px solid #9b9b9b;
+  outline: 0;
+  font-size: 1.3rem;
+  color: #fff;
+  padding: 7px 0;
+  background: transparent;
+  transition: border-color 0.2s;
+
+  z-index: 100;
+  position: relative;
+}
+.form__field::placeholder {
+  color: transparent;
+}
+.form__field:placeholder-shown ~ .form__label {
+  font-size: 1.3rem;
+  cursor: text;
+  top: 20px;
+}
+
+.form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 1rem;
+  color: #9b9b9b;
+}
+
+.form__field:focus {
+  padding-bottom: 6px;
+  font-weight: 700;
+  border-width: 3px;
+  border-image: linear-gradient(to right, #ffffff, #1ed760);
+  border-image-slice: 1;
+}
+.form__field:focus ~ .form__label {
+  position: absolute;
+  top: 0;
+  display: block;
+  transition: 0.2s;
+  font-size: 1rem;
+  color: #58e088;
+  font-weight: 700;
+}
+
+/* reset input */
+.form__field:required,
+.form__field:invalid {
+  box-shadow: none;
+}
+
+.user-container {
+}
+
+.column2 {
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  display: flex;
+}
+
+.playlist-list {
+  padding-bottom: 10rem;
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  gap: 1rem;
+}
+
+.playlist-wrapper {
+  color: white;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.playlist-img {
+  object-fit: cover;
+  height: 70px;
+  width: 70px;
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+
+.playlist-box {
+  cursor: pointer;
+  transition: 0.3s;
+  border-radius: 0.5rem;
+}
+.playlist-box:hover {
+  --_p: 75%;
+}
+
+/* .playlist-box {
+  border-radius: 0.5rem;
+} */
+
+.playlist-box:hover {
+  background-color: #616467;
+}
+
+.selectedPlaylist {
+  background-color: #4a4a4b;
+  border-width: 2px;
+  border-color: #e0e0e0;
+  border-style: solid;
+  filter: grayscale(0%);
+}
+
+.playlistItem-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.playlist-songs {
+  font-size: 12px;
+}
+
+.playlist-error {
+  color: #bb3e3e;
+}
+
+.selectPlaylist {
+  color: #1ed760;
+}
+
+.error-container {
+  position: absolute;
+  display: flex;
+  margin-left: 45%;
+  margin-top: 0.5em;
+}
+
+.error-message {
+  font-size: large;
+  color: #bb3e3e;
+}

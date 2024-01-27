@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script
+      type="text/javascript"
+      src="http://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+    ></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Spotfiy Twin</title>
+    <link rel="stylesheet" href="/static/stylesheets/button-styles.css" />
+    <link rel="stylesheet" href="/static/stylesheets/styles.css" />
+    <link rel="stylesheet" href="/static/stylesheets/chemPerc-styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"
+    />
+    <script src="/static/app.js"></script>
+  </head>
+  <body>
+    <header>
+      <nav class="nav">
+        <a href="" class="nav_logo">Spotify Twin</a>
+
+        {% if not g.user %}
+        <a href="/login" class="nav_link">Login</a>
+        {% else %}
+        <a href="/logout" class="nav_link">Logout</a>
+        {% endif %}
+      </nav>
+    </header>
+    <div class="error-container">
+      {% for category, message in get_flashed_messages(with_categories=True) %}
+      <div class="error-message">{{ message }}</div>
+      {% endfor %}
+    </div>
+
+    {% block content %} {% endblock %}
+  </body>
+</html>
