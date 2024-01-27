@@ -28,23 +28,29 @@ CURR_USER_KEY = "curr_user"
 CommonSongData = []
 
 
-app = Flask(__name__)
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///capstone_db"
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_ECHO"] = True
-app.config["SECRET_KEY"] = "abc123"
-app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
-
-app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
-
-app.app_context().push()
-
-
-toolbar = DebugToolbarExtension(app)
 
 authToken = ""
 
+def createApp():
+    app = Flask(__name__)
+
+    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///capstone_db"
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["SQLALCHEMY_ECHO"] = True
+    app.config["SECRET_KEY"] = "abc123"
+    app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
+
+    app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
+
+    app.app_context().push()
+
+
+    toolbar = DebugToolbarExtension(app)
+
+    return app
+
+app = createApp()
 
 ################################################################################
 
