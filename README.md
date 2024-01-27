@@ -1,4 +1,4 @@
-# Capstone-1
+Spotify Twin
 
 If you use Spotify and you ever wanted to find other people who have the same music taste as you, well this will solve that problem
 
