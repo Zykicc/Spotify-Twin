@@ -6,7 +6,6 @@ import requests
 import re
 
 
-
 # keys
 USER1_PLAYLIST = "user1_playlist"
 USER2_PLAYLIST = "user2_playlist"
@@ -26,9 +25,6 @@ CURR_USER_KEY = "curr_user"
 
 # glboal vars
 CommonSongData = []
-
-
-
 
 authToken = ""
 
@@ -53,7 +49,6 @@ def createApp():
 app = createApp()
 
 ################################################################################
-
 
 @app.route('/getUserPlaylists', methods=["GET", "POST"])
 def getUserPlaylists():
