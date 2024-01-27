@@ -106,6 +106,18 @@ def getUserPlaylists():
 def getPlaylistItems(userId, playlistId):
     """gets all songs in the playlist, and gets the first 1000 songs in the playlist with offset function. All data is saved in pickle file"""
 
+    prevSelectedPlaylistId = ''
+    if userId == "user1":
+        if USER1_SELECTED_PLAYLIST_ID in session:
+            prevSelectedPlaylistId = getSelectedUserPlaylistDataFromSession(USER1_SELECTED_PLAYLIST_ID)
+    else:
+        if USER2_SELECTED_PLAYLIST_ID in session:
+            prevSelectedPlaylistId = getSelectedUserPlaylistDataFromSession(USER2_SELECTED_PLAYLIST_ID)
+
+    if prevSelectedPlaylistId != playlistId:
+        if CHEMISTRY_DATA in session:
+            del session[CHEMISTRY_DATA]
+
     selectedPlayList = ''
     new_songList = []
     try:
