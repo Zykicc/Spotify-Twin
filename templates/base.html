@@ -21,12 +21,6 @@
     <header>
       <nav class="nav">
         <a href="" class="nav_logo">Spotify Twin</a>
-
-        {% if not g.user %}
-        <a href="/login" class="nav_link">Login</a>
-        {% else %}
-        <a href="/logout" class="nav_link">Logout</a>
-        {% endif %}
       </nav>
     </header>
     <div class="error-container">

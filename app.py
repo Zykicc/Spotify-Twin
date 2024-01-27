@@ -1,9 +1,6 @@
-from flask import Flask, render_template, request, flash, redirect, session, g
+from flask import Flask, render_template, request, flash, redirect, session
 from flask_debugtoolbar import DebugToolbarExtension
-from werkzeug.exceptions import Unauthorized
-from sqlalchemy.exc import IntegrityError
-from models import connect_db, db, User
-from forms import LoginForm, SignUpForm, GetUser1, GetUser2
+from forms import GetUser1, GetUser2
 from appFunctions import *
 import requests
 import re
@@ -42,99 +39,12 @@ app.config['DEBUG_TB_INTERCEPT_REDIRECTS'] = False
 app.config.update(SESSION_COOKIE_SAMESITE="None", SESSION_COOKIE_SECURE=True)
 
 app.app_context().push()
-connect_db(app)
 
 
 toolbar = DebugToolbarExtension(app)
 
 authToken = ""
 
-@app.before_request
-def add_user_to_g():
-    """If we're logged in, add curr user to Flask global."""
-
-    if CURR_USER_KEY in session:
-        g.user = User.query.get(session[CURR_USER_KEY])
-
-    else:
-        g.user = None
-
-
-def do_login(user):
-    """Log in user."""
-
-    session[CURR_USER_KEY] = user.id
-
-
-def do_logout():
-    """Logout user."""
-
-    if CURR_USER_KEY in session:
-        del session[CURR_USER_KEY]
-
-
-################################################################################
-
-
-@app.route("/register", methods=["GET", "POST"])
-def signup():
-  """register page and handles form submission"""
-
-
-  form = SignUpForm()
-
-  if form.validate_on_submit():
-        try:
-            user = User.signup(
-                username=form.username.data,
-                password=form.password.data,
-                email=form.email.data,
-                
-            )
-            db.session.commit()
-
-        except IntegrityError:
-            flash("Username already taken", 'danger')
-            return render_template('signup_page.html', form=form)
-
-        do_login(user)
-
-        return redirect("/")
-
-  return render_template("signup_page.html", form=form)
-
-################################################################################
-
-@app.route("/login", methods=["GET", "POST"])
-def login():
-  """Login page and handles form submission"""
-
-  form = LoginForm()
-
-  if form.validate_on_submit():
-        user = User.authenticate(form.username.data,
-                                 form.password.data)
-
-        if user:
-            do_login(user)
-            flash(f"Hello, {user.username}!", "success")
-            return redirect("/")
-
-        flash("Invalid credentials.", 'danger')
-  
-
-  return render_template("Login_page.html", form=form)
-
-################################################################################
-
-
-@app.route('/logout')
-def logout():
-    """Handle logout of user."""
-
-    do_logout()
-    flash("Goodbye!", "info")
-    return redirect('/')
 
 ################################################################################
 
@@ -383,9 +293,9 @@ def home_page():
         
     global CommonSongData
     print(CommonSongData)
-    if g.user:
-        return render_template('home.html', form1=form1, form2=form2, playListUser1=playListUser1, playListUser2=playListUser2, showCompareBtn=filledBothSongList, selectedUser1PlaylistId=selectedUser1PlaylistId, selectedUser2PlaylistId=selectedUser2PlaylistId, chemistryData=chemistryData, user1PlaylistIsEmpty=user1PlaylistIsEmpty, user2PlaylistIsEmpty=user2PlaylistIsEmpty,
-        CommonSongData=CommonSongData)
+    
+    return render_template('home.html', form1=form1, form2=form2, playListUser1=playListUser1, playListUser2=playListUser2, showCompareBtn=filledBothSongList, selectedUser1PlaylistId=selectedUser1PlaylistId, selectedUser2PlaylistId=selectedUser2PlaylistId, chemistryData=chemistryData, user1PlaylistIsEmpty=user1PlaylistIsEmpty, user2PlaylistIsEmpty=user2PlaylistIsEmpty,
+    CommonSongData=CommonSongData)
   
-    else:
-        return render_template("home_anon.html")
+    
+        
