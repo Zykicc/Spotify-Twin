@@ -1,10 +1,13 @@
-from flask import Flask, render_template, request, flash, redirect, session
+from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from forms import GetUser1, GetUser2
+from models import connect_db, db, User
+from sqlalchemy.exc import IntegrityError
+from sqlalchemy import update
 from appFunctions import *
 import requests
 import re
-
+import json
 
 # keys
 USER1_PLAYLIST = "user1_playlist"
@@ -24,22 +27,20 @@ CHEMISTRY_DATA = "CHEMISTRY_DATA"
 CURR_USER_KEY = "curr_user"
 
 # glboal vars
-CommonSongData = []
+# CommonSongData = []
 
-User1PlaylistData = []
-User2PlaylistData = []
+# User1PlaylistData = []
+# User2PlaylistData = []
 
-User1SonglistData = []
-User2SonglistData = []
+# User1SonglistData = []
+# User2SonglistData = []
 
 authToken = ""
-
-LoadedFirstTime = True
 
 def createApp():
     app = Flask(__name__)
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///capstone_db"
+    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql:///spotifytwin_db"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SQLALCHEMY_ECHO"] = True
     app.config["SECRET_KEY"] = "abc123"
@@ -55,8 +56,43 @@ def createApp():
     return app
 
 app = createApp()
+connect_db(app)
 
 ################################################################################
+@app.before_request
+def add_user_to_g():
+    """If we're logged in, add curr user to Flask global."""
+
+    if CURR_USER_KEY in session:
+        g.user = User.query.get(session[CURR_USER_KEY])
+
+    else:
+        g.user = None
+        user = None
+        try:
+            user = User.signup()
+        except IntegrityError:
+            flash("Sign up error", 'danger')
+
+        db.session.commit()
+        do_login(user)
+
+def do_login(user):
+    """Log in user."""
+
+    session[CURR_USER_KEY] = user.id
+
+
+# @app.route('/setData', methods=["GET", "POST"])
+# def setData():
+#     if 'user1_playlist' in request.form:
+#         global User1PlaylistData
+#         User1PlaylistData = request.form['user1_playlist']
+    
+#     print("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^")
+    
+#     return redirect('/')
+
 
 @app.route('/getUserPlaylists', methods=["GET", "POST"])
 def getUserPlaylists():
@@ -89,16 +125,19 @@ def getUserPlaylists():
             })
 
         if 'user1_id' in request.form:
-            global User1PlaylistData
-            User1PlaylistData = new_playlist
-            # writeDataToPickle(USER1_PLAYLIST, new_playlist)
+            # global User1PlaylistData
+            # User1PlaylistData = new_playlist
+
+            updateColumnData(g.user.id, "user1_playlist", new_playlist)
+
             if len(new_playlist) == 0:
                 session[USER1_HAS_EMPTY_PLAYLIST] = True
             else:
                 session[USER1_HAS_EMPTY_PLAYLIST] = False
         else:
-            global User2PlaylistData
-            User2PlaylistData = new_playlist
+            # global User2PlaylistData
+            # User2PlaylistData = new_playlist
+            updateColumnData(g.user.id, "user2_playlist", new_playlist)
             # writeDataToPickle(USER2_PLAYLIST, new_playlist)
             if len(new_playlist) == 0:
                 session[USER2_HAS_EMPTY_PLAYLIST] = True
@@ -106,6 +145,7 @@ def getUserPlaylists():
                 session[USER2_HAS_EMPTY_PLAYLIST] = False
 
     except Exception as e:
+        print("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
         print(e)
         flash("Invalid Spotify link", 'danger')
         
@@ -134,12 +174,14 @@ def getPlaylistItems(userId, playlistId):
     new_songList = []
     try:
         if userId == "user1":
-            global User1PlaylistData
-            playListUser = User1PlaylistData
+            # global User1PlaylistData
+            # playListUser = User1PlaylistData
+            playListUser = getColumnData(g.user.id, "user1_playlist")
             # playListUser = getDataFromPickle(USER1_PLAYLIST)
         else:
-            global User2PlaylistData
-            playListUser = User2PlaylistData
+            # global User2PlaylistData
+            # playListUser = User2PlaylistData
+            playListUser = getColumnData(g.user.id, "user2_playlist")
             # playListUser = getDataFromPickle(USER2_PLAYLIST)
         selectedPlayList = [playlist for playlist in playListUser if playlist["id"] == playlistId]
         selectedPlayList = selectedPlayList[0]
@@ -182,13 +224,15 @@ def getPlaylistItems(userId, playlistId):
         flash("Error: Could not retreive songs", 'danger')
 
     if userId == "user1":
-        global User1SonglistData
-        User1SonglistData = new_songList
+        # global User1SonglistData
+        # User1SonglistData = new_songList
+        updateColumnData(g.user.id, "user1_songlist", new_songList)
         # writeDataToPickle(USER1_SONGLIST, new_songList)
         session[USER1_SELECTED_PLAYLIST_ID] = playlistId
     else:
-        global User2SonglistData
-        User2SonglistData = new_songList
+        # global User2SonglistData
+        # User2SonglistData = new_songList
+        updateColumnData(g.user.id, "user2_songlist", new_songList)
         # writeDataToPickle(USER2_SONGLIST, new_songList)
         session[USER2_SELECTED_PLAYLIST_ID] = playlistId
 
@@ -200,10 +244,12 @@ def getPlaylistItems(userId, playlistId):
 def comparePlaylists():
     """Gathers users playlists data and compares them"""
 
-    global User1SonglistData
-    global User2SonglistData
-    songListUser1 = User1SonglistData
-    songListUser2 = User2SonglistData
+    # global User1SonglistData
+    # global User2SonglistData
+    # songListUser1 = User1SonglistData
+    # songListUser2 = User2SonglistData
+    songListUser1 = getColumnData(g.user.id, "user1_songlist")
+    songListUser2 = getColumnData(g.user.id, "user2_songlist")
     # songListUser1 = getDataFromPickle(USER1_SONGLIST)
     # songListUser2 = getDataFromPickle(USER2_SONGLIST)
 
@@ -230,8 +276,9 @@ def comparePlaylists():
     songData2Ids = {song2['id'] for song2 in uniqueSongDataUser2}
 
     # setting data for global var
-    global CommonSongData
-    CommonSongData = [song for song in uniqueSongDataUser1 if song['id'] in songData2Ids]
+    commonSongData = [song for song in uniqueSongDataUser1 if song['id'] in songData2Ids]
+
+    updateColumnData(g.user.id, "commonSongData", commonSongData)
 
     sameSongCount = len(list(set(idList1).intersection(idList2)))
     sameArtistCount = len(list(set(artistList1).intersection(artistList2)))
@@ -270,17 +317,23 @@ def comparePlaylists():
 @app.route('/clearData', methods=["GET"])
 def clearData():
     """Handles clearing all saved data"""
-    global User1PlaylistData
-    User1PlaylistData = []
-    global User2PlaylistData
-    User2PlaylistData = []
+    # global User1PlaylistData
+    # User1PlaylistData = []
+
+    updateColumnData(g.user.id, "user1_playlist", [])
+    updateColumnData(g.user.id, "user2_playlist", [])
+    updateColumnData(g.user.id, "user1_songlist", [])
+    updateColumnData(g.user.id, "user2_songlist", [])
+
+    # global User2PlaylistData
+    # User2PlaylistData = []
     # writeDataToPickle(USER1_PLAYLIST, [])
     # writeDataToPickle(USER2_PLAYLIST, [])
     
-    global User1SonglistData
-    User1SonglistData = []
-    global User2SonglistData
-    User2SonglistData = []
+    # global User1SonglistData
+    # User1SonglistData = []
+    # global User2SonglistData
+    # User2SonglistData = []
     # writeDataToPickle(USER1_SONGLIST, [])
     # writeDataToPickle(USER2_SONGLIST, [])
 
@@ -299,8 +352,9 @@ def clearData():
     if USER2_HAS_EMPTY_PLAYLIST in session:
         session[USER2_HAS_EMPTY_PLAYLIST] = False
 
-    global CommonSongData
-    CommonSongData = []
+    # global CommonSongData
+    updateColumnData(g.user.id, "commonSongData", [])
+    # CommonSongData = []
     return redirect('/')
 
 ##################################################################
@@ -308,27 +362,30 @@ def clearData():
 def home_page():
     """home page, also all data is sent to this route"""
 
-    global LoadedFirstTime
-    if LoadedFirstTime:
-        if CHEMISTRY_DATA in session:
-            del session[CHEMISTRY_DATA]
-        LoadedFirstTime = False
-    
+   
+
     form1 = GetUser1()
     form2 = GetUser2()
     
-    global User1PlaylistData
-    playListUser1 = User1PlaylistData
-    global User2PlaylistData
-    playListUser2 = User2PlaylistData
+    # global User1PlaylistData
+    # playListUser1 = User1PlaylistData
+
+    playListUser1 = getColumnData(g.user.id, "user1_playlist")
+    playListUser2 = getColumnData(g.user.id, "user2_playlist")
+    songListUser1 = getColumnData(g.user.id, "user1_songlist")
+    songListUser2 = getColumnData(g.user.id, "user2_songlist")
+    
+
+    # global User2PlaylistData
+    # playListUser2 = User2PlaylistData
     # playListUser1 = getDataFromPickle(USER1_PLAYLIST)
     # playListUser2 = getDataFromPickle(USER2_PLAYLIST)
 
     filledBothSongList = False
-    global User1SonglistData
-    songListUser1 = User1SonglistData;
-    global User2SonglistData
-    songListUser2 = User2SonglistData;
+    # global User1SonglistData
+    # songListUser1 = User1SonglistData;
+    # global User2SonglistData
+    # songListUser2 = User2SonglistData;
     # songListUser1 = getDataFromPickle(USER1_SONGLIST)
     # songListUser2 = getDataFromPickle(USER2_SONGLIST)
 
@@ -348,11 +405,12 @@ def home_page():
     user2PlaylistIsEmpty = checkIfUserPlaylistIsEmpty(USER2_HAS_EMPTY_PLAYLIST)
 
         
-    global CommonSongData
-    print(CommonSongData)
+    # global CommonSongData
+    commonSongdata = getColumnData(g.user.id, "commonSongData")
+    
     
     return render_template('home.html', form1=form1, form2=form2, playListUser1=playListUser1, playListUser2=playListUser2, showCompareBtn=filledBothSongList, selectedUser1PlaylistId=selectedUser1PlaylistId, selectedUser2PlaylistId=selectedUser2PlaylistId, chemistryData=chemistryData, user1PlaylistIsEmpty=user1PlaylistIsEmpty, user2PlaylistIsEmpty=user2PlaylistIsEmpty,
-    CommonSongData=CommonSongData)
+    CommonSongData=commonSongdata, songListUser1=songListUser1, songListUser2=songListUser2)
   
     
         

@@ -1,8 +1,8 @@
-window.onload = () => {
-  console.log("load");
-  document.cookie = "cookiename= session; value = ";
-  console.log(document.cookie);
-};
+// window.onload = () => {
+//   console.log("load");
+//   document.cookie = "cookiename= session; value = ";
+//   console.log(document.cookie);
+// };
 
 function showLoading() {
   var overlay = document.getElementById("loading-overlay");
@@ -33,3 +33,55 @@ function showLoading() {
     msg3.style.display = "flex";
   }, "45000");
 }
+
+// async function sendData() {
+//   var user1_playlist = window.localStorage.getItem("user1_playlist");
+//   var user2_playlist = window.localStorage.getItem("user2_playlist");
+
+//   var user1_songlist = window.localStorage.getItem("user1_songlist");
+//   var user2_songlist = window.localStorage.getItem("user2_songlist");
+
+//   const formData = new FormData();
+
+//   // Add a text field
+//   formData.append("user1_playlist", user1_playlist);
+
+//   try {
+//     const response = await fetch(`${window.origin}/setData`, {
+//       method: "POST",
+//       // Set the FormData instance as the request body
+//       body: formData,
+//     });
+//     console.log(await response.json());
+//   } catch (e) {
+//     console.error(e);
+//   }
+
+// Form-encoded Request, like from Form
+// let fetchFormEncodedRequest = {
+//   cache: "no-cache",
+//   method: "POST",
+//   headers: {
+//     "Content-Type": "application/json",
+//   },
+//   body: {
+//     user1_playlist: user1_playlist,
+//     user2_playlist: user2_playlist,
+//     user1_songlist: user1_songlist,
+//     user2_songlist: user2_songlist,
+//   },
+// };
+
+// fetch(`${window.origin}/setData`, fetchFormEncodedRequest)
+//   .then(function (response) {
+//     if (response.status != 200) {
+//       console.log(response.statusText);
+//     }
+//     response.json().then(function (data) {
+//       console.log(data);
+//     });
+//   })
+//   .catch(function (error) {
+//     console.log(error);
+//   });
+// }

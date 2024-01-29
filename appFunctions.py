@@ -2,7 +2,7 @@ import pickle
 import requests
 import time
 from flask import session, flash
-
+from models import connect_db, db, User
 
 
 def getToken():
@@ -112,3 +112,44 @@ def get1000songs(playlistId, songCount):
     end = time.time()
     print(end - start)
     return collectedSongs
+
+
+def updateColumnData(id, colName, data):
+    userData = db.session.query(User).filter(User.id == id).one()
+    
+    if colName == "user1_playlist":
+        userData.user1_playlist = data
+    if colName == "user2_playlist":
+        userData.user2_playlist = data
+    if colName == "user1_songlist":
+        userData.user1_songlist = data
+    if colName == "user2_songlist":
+        userData.user2_songlist = data
+
+    if colName == "commonSongData":
+        print('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
+        print(data)
+        userData.commonSongData = data
+    db.session.commit()
+            
+
+def getColumnData(id, colName):
+    userData = db.session.query(User).filter(User.id == id).one()
+    data = None
+    if colName == "user1_playlist":
+        data = userData.user1_playlist
+    if colName == "user2_playlist":
+        data = userData.user2_playlist
+    if colName == "user1_songlist":
+        data = userData.user1_songlist 
+    if colName == "user2_songlist":
+        data = userData.user2_songlist
+    
+    if colName == "commonSongData":
+        data = userData.commonSongData
+    
+    if data == None or data == []:
+        return  []
+    else:
+        return  data
+    

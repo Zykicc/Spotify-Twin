@@ -1,4 +1,20 @@
 {% extends 'base.html' %} {% block content %}
+<!-- <script>
+  var user1_playlist = JSON.stringify("{{playListUser1}}");
+  console.log(user1_playlist);
+  if (user1_playlist === "[]") {
+    var u1pl_storage = window.localStorage.getItem("user1_playlist");
+    if (u1pl_storage !== "[]" || u1pl_storage == "") sendData();
+  } else {
+    window.localStorage.setItem("user1_playlist", user1_playlist);
+  }
+  var user2_playlist = JSON.stringify("{{playListUser2}}");
+  window.localStorage.setItem("user2_playlist", user2_playlist);
+  var user1_songlist = JSON.stringify("{{songListUser1}}");
+  window.localStorage.setItem("user1_songlist", user1_songlist);
+  var user2_songlist = JSON.stringify("{{songListUser2}}");
+  window.localStorage.setItem("user2_songlist", user2_songlist);
+</script> -->
 <div id="loading-overlay">
   <div
     style="
