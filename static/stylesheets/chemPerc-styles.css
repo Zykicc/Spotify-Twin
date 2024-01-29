@@ -6,6 +6,9 @@
 }
 
 .chem-wrapper {
+  height: 80%;
+  overflow-y: scroll;
+  overflow-x: hidden;
   background-color: #000000;
   width: 90%;
   padding: 1rem 0 10rem 0;
@@ -16,6 +19,18 @@
   border-width: thick;
   border-color: #1ed760;
   border-style: solid;
+}
+
+.chem-wrapper::-webkit-scrollbar {
+  width: 0.4em;
+}
+.chem-wrapper::-webkit-scrollbar,
+.chem-wrapper::-webkit-scrollbar-thumb {
+  overflow: visible;
+  border-radius: 4px;
+}
+.chem-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(158, 158, 158, 0.2);
 }
 
 .spotifychemPerc {

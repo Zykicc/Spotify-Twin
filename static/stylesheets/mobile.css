@@ -1,0 +1,6 @@
+/* styles for mobile devices */
+@media only screen and (max-width: 767px) {
+  .form__field {
+    font-size: 0.5rem;
+  }
+}

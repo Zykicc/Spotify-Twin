@@ -1,7 +1,8 @@
-$("#column1-button").click(function () {
-  $("#loading-overlay").css({ display: "initial" });
-  console.log("sdadasdsaadada");
-});
+window.onload = () => {
+  console.log("load");
+  document.cookie = "cookiename= session; value = ";
+  console.log(document.cookie);
+};
 
 function showLoading() {
   var overlay = document.getElementById("loading-overlay");

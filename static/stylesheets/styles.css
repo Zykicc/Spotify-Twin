@@ -334,11 +334,30 @@ input:-webkit-autofill:active {
 }
 
 .playlist-list {
+  overflow-y: hidden;
+  overflow-x: hidden;
+  height: 55%;
   padding-bottom: 10rem;
   display: flex;
   flex-direction: column;
   margin-top: 10px;
   gap: 1rem;
+}
+
+.playlist-list:hover {
+  overflow-y: scroll;
+}
+
+.playlist-list::-webkit-scrollbar {
+  width: 0.4em;
+}
+.playlist-list::-webkit-scrollbar,
+.playlist-list::-webkit-scrollbar-thumb {
+  overflow: visible;
+  border-radius: 4px;
+}
+.playlist-list::-webkit-scrollbar-thumb {
+  background: rgba(158, 158, 158, 0.2);
 }
 
 .playlist-wrapper {

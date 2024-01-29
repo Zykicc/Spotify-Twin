@@ -26,7 +26,15 @@ CURR_USER_KEY = "curr_user"
 # glboal vars
 CommonSongData = []
 
+User1PlaylistData = []
+User2PlaylistData = []
+
+User1SonglistData = []
+User2SonglistData = []
+
 authToken = ""
+
+LoadedFirstTime = True
 
 def createApp():
     app = Flask(__name__)
@@ -81,13 +89,17 @@ def getUserPlaylists():
             })
 
         if 'user1_id' in request.form:
-            writeDataToPickle(USER1_PLAYLIST, new_playlist)
+            global User1PlaylistData
+            User1PlaylistData = new_playlist
+            # writeDataToPickle(USER1_PLAYLIST, new_playlist)
             if len(new_playlist) == 0:
                 session[USER1_HAS_EMPTY_PLAYLIST] = True
             else:
                 session[USER1_HAS_EMPTY_PLAYLIST] = False
         else:
-            writeDataToPickle(USER2_PLAYLIST, new_playlist)
+            global User2PlaylistData
+            User2PlaylistData = new_playlist
+            # writeDataToPickle(USER2_PLAYLIST, new_playlist)
             if len(new_playlist) == 0:
                 session[USER2_HAS_EMPTY_PLAYLIST] = True
             else:
@@ -122,9 +134,13 @@ def getPlaylistItems(userId, playlistId):
     new_songList = []
     try:
         if userId == "user1":
-            playListUser = getDataFromPickle(USER1_PLAYLIST)
+            global User1PlaylistData
+            playListUser = User1PlaylistData
+            # playListUser = getDataFromPickle(USER1_PLAYLIST)
         else:
-            playListUser = getDataFromPickle(USER2_PLAYLIST)
+            global User2PlaylistData
+            playListUser = User2PlaylistData
+            # playListUser = getDataFromPickle(USER2_PLAYLIST)
         selectedPlayList = [playlist for playlist in playListUser if playlist["id"] == playlistId]
         selectedPlayList = selectedPlayList[0]
 
@@ -166,10 +182,14 @@ def getPlaylistItems(userId, playlistId):
         flash("Error: Could not retreive songs", 'danger')
 
     if userId == "user1":
-        writeDataToPickle(USER1_SONGLIST, new_songList)
+        global User1SonglistData
+        User1SonglistData = new_songList
+        # writeDataToPickle(USER1_SONGLIST, new_songList)
         session[USER1_SELECTED_PLAYLIST_ID] = playlistId
     else:
-        writeDataToPickle(USER2_SONGLIST, new_songList)
+        global User2SonglistData
+        User2SonglistData = new_songList
+        # writeDataToPickle(USER2_SONGLIST, new_songList)
         session[USER2_SELECTED_PLAYLIST_ID] = playlistId
 
     return redirect("/")
@@ -180,8 +200,12 @@ def getPlaylistItems(userId, playlistId):
 def comparePlaylists():
     """Gathers users playlists data and compares them"""
 
-    songListUser1 = getDataFromPickle(USER1_SONGLIST)
-    songListUser2 = getDataFromPickle(USER2_SONGLIST)
+    global User1SonglistData
+    global User2SonglistData
+    songListUser1 = User1SonglistData
+    songListUser2 = User2SonglistData
+    # songListUser1 = getDataFromPickle(USER1_SONGLIST)
+    # songListUser2 = getDataFromPickle(USER2_SONGLIST)
 
     songListdata1 = getSongData(songListUser1)
 
@@ -246,11 +270,19 @@ def comparePlaylists():
 @app.route('/clearData', methods=["GET"])
 def clearData():
     """Handles clearing all saved data"""
-    writeDataToPickle(USER1_PLAYLIST, [])
-    writeDataToPickle(USER2_PLAYLIST, [])
-
-    writeDataToPickle(USER1_SONGLIST, [])
-    writeDataToPickle(USER2_SONGLIST, [])
+    global User1PlaylistData
+    User1PlaylistData = []
+    global User2PlaylistData
+    User2PlaylistData = []
+    # writeDataToPickle(USER1_PLAYLIST, [])
+    # writeDataToPickle(USER2_PLAYLIST, [])
+    
+    global User1SonglistData
+    User1SonglistData = []
+    global User2SonglistData
+    User2SonglistData = []
+    # writeDataToPickle(USER1_SONGLIST, [])
+    # writeDataToPickle(USER2_SONGLIST, [])
 
     if CHEMISTRY_DATA in session:
         del session[CHEMISTRY_DATA]
@@ -275,18 +307,30 @@ def clearData():
 @app.route("/", methods=["GET", "POST"])
 def home_page():
     """home page, also all data is sent to this route"""
+
+    global LoadedFirstTime
+    if LoadedFirstTime:
+        if CHEMISTRY_DATA in session:
+            del session[CHEMISTRY_DATA]
+        LoadedFirstTime = False
     
     form1 = GetUser1()
     form2 = GetUser2()
-
-
     
-    playListUser1 = getDataFromPickle(USER1_PLAYLIST)
-    playListUser2 = getDataFromPickle(USER2_PLAYLIST)
+    global User1PlaylistData
+    playListUser1 = User1PlaylistData
+    global User2PlaylistData
+    playListUser2 = User2PlaylistData
+    # playListUser1 = getDataFromPickle(USER1_PLAYLIST)
+    # playListUser2 = getDataFromPickle(USER2_PLAYLIST)
 
     filledBothSongList = False
-    songListUser1 = getDataFromPickle(USER1_SONGLIST)
-    songListUser2 = getDataFromPickle(USER2_SONGLIST)
+    global User1SonglistData
+    songListUser1 = User1SonglistData;
+    global User2SonglistData
+    songListUser2 = User2SonglistData;
+    # songListUser1 = getDataFromPickle(USER1_SONGLIST)
+    # songListUser2 = getDataFromPickle(USER2_SONGLIST)
 
 
     if len(songListUser1) != 0 and len(songListUser2) != 0:
