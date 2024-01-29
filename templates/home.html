@@ -1,20 +1,4 @@
 {% extends 'base.html' %} {% block content %}
-<!-- <script>
-  var user1_playlist = JSON.stringify("{{playListUser1}}");
-  console.log(user1_playlist);
-  if (user1_playlist === "[]") {
-    var u1pl_storage = window.localStorage.getItem("user1_playlist");
-    if (u1pl_storage !== "[]" || u1pl_storage == "") sendData();
-  } else {
-    window.localStorage.setItem("user1_playlist", user1_playlist);
-  }
-  var user2_playlist = JSON.stringify("{{playListUser2}}");
-  window.localStorage.setItem("user2_playlist", user2_playlist);
-  var user1_songlist = JSON.stringify("{{songListUser1}}");
-  window.localStorage.setItem("user1_songlist", user1_songlist);
-  var user2_songlist = JSON.stringify("{{songListUser2}}");
-  window.localStorage.setItem("user2_songlist", user2_songlist);
-</script> -->
 <div id="loading-overlay">
   <div
     style="
@@ -34,21 +18,40 @@
     Someone has way to much free time!
   </h2>
 </div>
+
+<div class="info-container" id="info-container">
+  <div class="info-wrapper">
+    <button class="info-close-btn" onclick="closeInfo()">close</button>
+    <div class="info-title">
+      Make sure to set your playlist public and add it to your profile
+    </div>
+    <div class="info-gif">
+      <img class="img-gif" src="/static/info.gif" alt="" />
+    </div>
+  </div>
+</div>
+
 <div class="column-wrapper">
   <div class="column1">
     <form action="/getUserPlaylists" method="POST" class="user1">
       <div class="user-container">
-        <div class="form__group field">
-          {{ form1.hidden_tag() }} {% for field in form1 if
-          field.widget.input_type != 'hidden' %} {% for error in field.errors %}
-          <span class="text-danger">{{ error }}</span>
-          {% endfor %} {{ field(placeholder=field.label.text,
-          class="form__field") }}
-          <label for="name" class="form__label"
-            >Enter Spotify link for User 1</label
-          >
+        <div class="help-wrap" style="display: flex">
+          <div class="form__group field">
+            {{ form1.hidden_tag() }} {% for field in form1 if
+            field.widget.input_type != 'hidden' %} {% for error in field.errors
+            %}
+            <span class="text-danger">{{ error }}</span>
+            {% endfor %} {{ field(placeholder=field.label.text,
+            class="form__field") }}
+            <label for="name" class="form__label"
+              >Enter Spotify link for User 1</label
+            >
 
-          {% endfor %}
+            {% endfor %}
+          </div>
+          <div style="height: auto; display: flex; align-items: end">
+            <div class="help-info" onclick="showInfo()">?</div>
+          </div>
         </div>
         <button id="column1-button" class="column1-button">Submit</button>
       </div>
@@ -146,16 +149,22 @@
   <div class="column3">
     <form action="/getUserPlaylists" method="POST" class="user2">
       <div class="user-container">
-        <div class="form__group field">
-          {{ form2.hidden_tag() }} {% for field in form2 if
-          field.widget.input_type != 'hidden' %} {% for error in field.errors %}
-          <span class="text-danger">{{ error }}</span>
-          {% endfor %} {{ field(placeholder=field.label.text,
-          class="form__field") }}
-          <label for="name" class="form__label"
-            >Enter Spotiy link for User 2</label
-          >
-          {% endfor %}
+        <div class="help-wrap" style="display: flex">
+          <div class="form__group field">
+            {{ form2.hidden_tag() }} {% for field in form2 if
+            field.widget.input_type != 'hidden' %} {% for error in field.errors
+            %}
+            <span class="text-danger">{{ error }}</span>
+            {% endfor %} {{ field(placeholder=field.label.text,
+            class="form__field") }}
+            <label for="name" class="form__label"
+              >Enter Spotiy link for User 2</label
+            >
+            {% endfor %}
+          </div>
+          <div style="height: auto; display: flex; align-items: end">
+            <div class="help-info" onclick="showInfo()">?</div>
+          </div>
         </div>
         <button id="column2-button" class="column2-button">Submit</button>
       </div>

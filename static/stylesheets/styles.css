@@ -427,3 +427,22 @@ input:-webkit-autofill:active {
   font-size: large;
   color: #bb3e3e;
 }
+
+.help-info {
+  color: white;
+  border: 1px solid #1ed760;
+  border-radius: 1rem;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  /* padding: 0.5rem; */
+  height: 30px;
+  /* width: 25px; */
+  aspect-ratio: 1 / 1;
+}
+
+.help-info:hover {
+  transition: 0.3s;
+  background-color: #616467;
+}
