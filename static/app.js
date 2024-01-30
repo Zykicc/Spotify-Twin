@@ -37,3 +37,13 @@ function closeInfo() {
   var info_popup = document.getElementById("info-container");
   info_popup.style.display = "none";
 }
+
+function showHelp() {
+  var info_popup = document.getElementById("help-container");
+  info_popup.style.display = "flex";
+}
+
+function closeHelp() {
+  var info_popup = document.getElementById("help-container");
+  info_popup.style.display = "none";
+}

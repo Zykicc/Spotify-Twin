@@ -358,8 +358,8 @@ def home_page():
     
     chemistryData = getChemistryData(CHEMISTRY_DATA)
 
-    user1PlaylistIsEmpty = checkIfUserPlaylistIsEmpty(USER1_HAS_EMPTY_PLAYLIST)
-    user2PlaylistIsEmpty = checkIfUserPlaylistIsEmpty(USER2_HAS_EMPTY_PLAYLIST)
+    user1PlaylistIsEmpty = checkIfUserPlaylistIsEmpty(playListUser1)
+    user2PlaylistIsEmpty = checkIfUserPlaylistIsEmpty(playListUser2)
 
 
     commonSongdata = getColumnData(g.user.id, "commonSongData")
@@ -367,6 +367,6 @@ def home_page():
     
     return render_template('home.html', form1=form1, form2=form2, playListUser1=playListUser1, playListUser2=playListUser2, showCompareBtn=filledBothSongList, selectedUser1PlaylistId=selectedUser1PlaylistId, selectedUser2PlaylistId=selectedUser2PlaylistId, chemistryData=chemistryData, user1PlaylistIsEmpty=user1PlaylistIsEmpty, user2PlaylistIsEmpty=user2PlaylistIsEmpty,
     CommonSongData=commonSongdata, songListUser1=songListUser1, songListUser2=songListUser2)
-  
+
     
         

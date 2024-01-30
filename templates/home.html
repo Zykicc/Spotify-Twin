@@ -31,6 +31,16 @@
   </div>
 </div>
 
+<div class="info-container" id="help-container">
+  <div class="info-wrapper">
+    <button class="info-close-btn" onclick="closeHelp()">close</button>
+    <div class="info-title">How to get your Spotify Profile Link</div>
+    <div class="info-gif">
+      <img class="img-gif" src="/static/help.gif" alt="" />
+    </div>
+  </div>
+</div>
+
 <div class="column-wrapper">
   <div class="column1">
     <form action="/getUserPlaylists" method="POST" class="user1">
@@ -50,7 +60,7 @@
             {% endfor %}
           </div>
           <div style="height: auto; display: flex; align-items: end">
-            <div class="help-info" onclick="showInfo()">?</div>
+            <div class="help-info" onclick="showHelp()">?</div>
           </div>
         </div>
         <button id="column1-button" class="column1-button">Submit</button>
@@ -59,11 +69,13 @@
     <div class="playlist-list">
       {% if playListUser1|length > 0 %}
       <h2 class="selectPlaylist">Select a Playlist</h2>
-      {% endif %} {% for playlist in playListUser1 %} {% if user1PlaylistIsEmpty
-      %}
+      {% endif %} {% if user1PlaylistIsEmpty %}
       <div class="playlist-error">No public playlists found</div>
-      <p class="playlist-error">Make sure user playlists are public</p>
-      {% endif %}
+      <div style="height: auto; display: flex; align-items: end">
+        <p class="playlist-error">Make sure user playlists are public</p>
+        <div class="help-info" onclick="showInfo()">?</div>
+      </div>
+      {% endif %} {% for playlist in playListUser1 %}
       <div
         class="playlist-box {% if selectedUser1PlaylistId == playlist.id %} selectedPlaylist {% endif %}"
         onclick="showLoading()"
@@ -163,7 +175,7 @@
             {% endfor %}
           </div>
           <div style="height: auto; display: flex; align-items: end">
-            <div class="help-info" onclick="showInfo()">?</div>
+            <div class="help-info" onclick="showHelp()">?</div>
           </div>
         </div>
         <button id="column2-button" class="column2-button">Submit</button>
@@ -174,7 +186,10 @@
       <h2 class="selectPlaylist">Select a Playlist</h2>
       {% endif %} {% if user2PlaylistIsEmpty %}
       <div class="playlist-error">No public playlists found</div>
-      <p class="playlist-error">Make sure user playlists are public</p>
+      <div style="height: auto; display: flex; align-items: end">
+        <p class="playlist-error">Make sure user playlists are public</p>
+        <div class="help-info" onclick="showInfo()">?</div>
+      </div>
       {% endif %} {% for playlist in playListUser2 %}
       <div
         class="playlist-box {% if selectedUser2PlaylistId == playlist.id %} selectedPlaylist {% endif %}"
