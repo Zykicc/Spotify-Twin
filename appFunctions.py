@@ -41,11 +41,11 @@ def getSongData(songList):
 
 
 
-def checkIfUserPlaylistIsEmpty(data):
-    check = False
-    if len(data) == 0:
-        check = True
-    return check
+def checkIfUserPlaylistIsEmpty(key):
+    data = False
+    if key in session:
+        data = session[key]
+    return data
 
 def getChemistryData(key):
     data = {}

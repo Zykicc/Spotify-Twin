@@ -358,8 +358,8 @@ def home_page():
     
     chemistryData = getChemistryData(CHEMISTRY_DATA)
 
-    user1PlaylistIsEmpty = checkIfUserPlaylistIsEmpty(playListUser1)
-    user2PlaylistIsEmpty = checkIfUserPlaylistIsEmpty(playListUser2)
+    user1PlaylistIsEmpty = checkIfUserPlaylistIsEmpty(USER1_HAS_EMPTY_PLAYLIST)
+    user2PlaylistIsEmpty = checkIfUserPlaylistIsEmpty(USER2_HAS_EMPTY_PLAYLIST)
 
 
     commonSongdata = getColumnData(g.user.id, "commonSongData")
