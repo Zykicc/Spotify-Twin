@@ -1,6 +1,61 @@
 /* styles for mobile devices */
-@media only screen and (max-width: 767px) {
-  .form__field {
+@media only screen and (max-width: 1250px) {
+  .clearCompareWrapper {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .column2 {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    max-height: 400px;
+    background-color: black;
+    z-index: 100;
+  }
+
+  .column1,
+  .column3 {
+    flex: 1;
+    padding: 1rem;
+  }
+
+  .info-wrapper {
+    width: 100%;
+  }
+
+  .img-gif {
+    width: 100%;
+    aspect-ratio: 1/1;
+  }
+
+  .form__field:placeholder-shown ~ .form__label {
+    font-size: 0.85rem;
+    cursor: text;
+    top: 20px;
+  }
+
+  .playlist-list {
+    height: 186px;
+    padding-bottom: 0;
+  }
+}
+
+@media only screen and (max-width: 455px) {
+  .selectPlaylist {
+    font-size: 0.85rem;
+  }
+
+  .playlist-item {
     font-size: 0.5rem;
+  }
+
+  .playlist-box {
+    height: 55px;
+  }
+
+  .playlist-img {
+    height: 51px;
+    width: 51px;
   }
 }
